@@ -1,2 +1,2 @@
 # DumbDB
-LevelDB Implemented by dumb people
+LevelDB implemented by dumb people
