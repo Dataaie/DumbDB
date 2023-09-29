@@ -3,16 +3,20 @@
 #include <unordered_map>
 #include <vector>
 #include <utility>
+#include <optional>
+using namespace std;
 
 template <typename K, typename V>
-class DumbDB {
+class IDumbDB {
 public:
-    void Open(const std::string& database_name);
-    void Put(const K& key, const V& value);
-    V Get(const K& key);
-    std::vector<std::pair<K, V>> Scan(const K& key1, const K& key2);
-    void Close();
-
-private:
-    std::unordered_map<K, V> db_;
+    virtual ~IDumbDB() {};
+    virtual void Open(const std::string& database_name) = 0;
+    virtual void Put(const K& key, const optional<V>& value) = 0;
+    virtual optional<V> Get(const K& key) = 0;
+    virtual void Delete(const K& key) = 0;
+    virtual std::vector<std::pair<K, optional<V>>> Scan(const K& key1, const K& key2) = 0;
+    virtual void Close() = 0;
 };
+
+template <typename K, typename V>
+IDumbDB<K, V>* CreateDumbDB();
