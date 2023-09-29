@@ -1,31 +1,31 @@
 #include <iostream>
-#include "dumb.h"
+#include "dumb.hpp"
 
-template class IDumbDB<string, optional<string>>;
-template IDumbDB<string, string>* CreateDumbDB<string, string>();
+template class IDumbDB<KEY_TYPE, optional<VALUE_TYPE>>;
+template IDumbDB<KEY_TYPE, VALUE_TYPE>* CreateDumbDB<KEY_TYPE, VALUE_TYPE>();
 
 template <typename K, typename V>
 class DumbDB : public IDumbDB<K, V> {
 public:
     virtual ~DumbDB();
-    virtual void Open(const std::string& database_name);
+    virtual void Open(const string& database_name);
     virtual void Put(const K& key, const optional<V>& value);
     virtual optional<V> Get(const K& key);
     virtual void Delete(const K& key);
-    virtual std::vector<std::pair<K, optional<V>>> Scan(const K& key1, const K& key2);
+    virtual vector<pair<K, optional<V>>> Scan(const K& key1, const K& key2);
     virtual void Close();
 private:
-    std::unordered_map<K, optional<V>> db_;
     bool is_open_ = false;
+    unordered_map<K, optional<V>> db_;
 };
 
 template <typename K, typename V>
-void DumbDB<K, V>::Open(const std::string& database_name) {
+void DumbDB<K, V>::Open(const string& database_name) {
     if (is_open_) {
-        std::cout << "Database " << database_name << " already open.\n";
+        cout << "Database " << database_name << " already open.\n";
         return;
     }
-    std::cout << "Database " << database_name << " opened.\n";
+    cout << "Database " << database_name << " opened.\n";
 }
 
 template <typename K, typename V>
@@ -48,8 +48,8 @@ void DumbDB<K, V>::Delete(const K& key) {
 }
 
 template <typename K, typename V>
-std::vector<std::pair<K, optional<V>>> DumbDB<K, V>::Scan(const K& key1, const K& key2) {
-    std::vector<std::pair<K, optional<V>>> results;
+vector<pair<K, optional<V>>> DumbDB<K, V>::Scan(const K& key1, const K& key2) {
+    vector<pair<K, optional<V>>> results;
     for (const auto& kv : db_) {
         if (kv.first >= key1 && kv.first <= key2) {
             results.push_back(kv);
@@ -61,10 +61,10 @@ std::vector<std::pair<K, optional<V>>> DumbDB<K, V>::Scan(const K& key1, const K
 template <typename K, typename V>
 void DumbDB<K, V>::Close() {
     if (!is_open_) {
-        std::cout << "Database already closed.\n";
+        cout << "Database already closed.\n";
         return;
     }
-    std::cout << "Database closed.\n";
+    cout << "Database closed.\n";
 }
 
 template <typename K, typename V>
@@ -73,7 +73,6 @@ DumbDB<K, V>::~DumbDB() {
 }
 
 template <typename K, typename V>
-IDumbDB<K, V>* CreateDumbDB()
-{
+IDumbDB<K, V>* CreateDumbDB() {
     return new DumbDB<K, V>();
 }
