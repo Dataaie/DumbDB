@@ -1,19 +1,20 @@
+#include "config.hpp"
 #include <iostream>
 #include "dumb.hpp"
 
-template class IDumbDB<KEY_TYPE, optional<VALUE_TYPE>>;
+template class IDumbDB<KEY_TYPE, VALUE_TYPE>;
 template IDumbDB<KEY_TYPE, VALUE_TYPE>* CreateDumbDB<KEY_TYPE, VALUE_TYPE>();
 
 template <typename K, typename V>
 class DumbDB : public IDumbDB<K, V> {
 public:
-    virtual ~DumbDB();
-    virtual void Open(const string& database_name);
-    virtual void Put(const K& key, const optional<V>& value);
-    virtual optional<V> Get(const K& key);
-    virtual void Delete(const K& key);
-    virtual vector<pair<K, optional<V>>> Scan(const K& key1, const K& key2);
-    virtual void Close();
+    ~DumbDB();
+    void Open(const string& database_name) override;
+    void Put(const K& key, const optional<V>& value) override;
+    optional<V> Get(const K& key) override;
+    void Delete(const K& key) override;
+    vector<pair<K, optional<V>>> Scan(const K& key1, const K& key2) override;
+    void Close() override;
 private:
     bool is_open_ = false;
     unordered_map<K, optional<V>> db_;

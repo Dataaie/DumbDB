@@ -1,6 +1,6 @@
 #include "dumb.hpp"
 #include "utils.hpp"
-#include "red_black_tree.hpp"
+#include "balanced_tree_factory.hpp"
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -54,7 +54,7 @@ void simplest_test() {
 }
 
 void red_black_tree_simple_test() {
-    auto tree = new RBTree<string, string>();
+    auto tree = createBalancedTree<string, string>(TreeType::RedBlackTree);
     tree->insert("key1", "value1");
     tree->insert("key2", "value2");
     tree->insert("key3", "value3");

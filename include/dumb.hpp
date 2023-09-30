@@ -4,10 +4,8 @@
 #include <vector>
 #include <utility>
 #include <optional>
-using namespace std;
 
-#define KEY_TYPE string
-#define VALUE_TYPE string
+using namespace std;
 
 template <typename K, typename V>
 class IDumbDB {
