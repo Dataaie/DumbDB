@@ -1,7 +1,25 @@
 #include "node.hpp"
 #include "config.hpp"
+#include "utils.hpp"
 
 template class Node<KEY_TYPE, VALUE_TYPE>;
+
+template <typename K, typename V>
+bool Node<K, V>::has_key(const K& key) {
+    if (key < this->key) {
+        if (left == nullptr) {
+            return false;
+        }
+        return left->has_key(key);
+    } else if (key > this->key) {
+        if (right == nullptr) {
+            return false;
+        }
+        return right->has_key(key);
+    } else {
+        return true;
+    }
+};
 
 template <typename K, typename V>
 optional<V> Node<K, V>::search(const K& key) {
@@ -21,23 +39,26 @@ optional<V> Node<K, V>::search(const K& key) {
 };
 
 template <typename K, typename V>
-void Node<K, V>::insert(const K& key, const optional<V>& value) {
+Node<K, V>* Node<K, V>::insert(const K& key, const optional<V>& value) {
     if (key < this->key) {
+        Node<K, V>* new_node;
         if (left == nullptr) {
-            left = new Node<K, V>(key, value, RED);
-            left->parent = this;
+            add_child(this, new Node<K, V>(key, value, RED), Direction::LEFT);
+            return this->left;
         } else {
-            left->insert(key, value);
+            return left->insert(key, value);
         }
     } else if (key > this->key) {
+        Node<K, V>* new_node;
         if (right == nullptr) {
-            right = new Node<K, V>(key, value, RED);
-            right->parent = this;
+            add_child(this, new Node<K, V>(key, value, RED), Direction::RIGHT);
+            return this->right;
         } else {
-            right->insert(key, value);
+            return right->insert(key, value);
         }
     } else {
         this->value = value;
+        return nullptr;
     }
 };
 
