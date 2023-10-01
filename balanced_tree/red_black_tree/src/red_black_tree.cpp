@@ -69,29 +69,94 @@ template <typename K, typename V>
 inline Node<K, V>* adjust_upward(Node<K, V>* current, Node<K, V>* child) {
     if (child->color == Color::RED) {
         if (current->color == BLACK) {
-            // case1
+            /* case 1:
+                    B(current)
+                    /
+                    R(child)
+            */
             return current;
         } else {
             if (current->parent == nullptr) {
-                // case4
+                /* case 4:
+                        R(parent, root)
+                        /
+                        R(child)
+                */
                 current->color = BLACK;
                 return current;
+                /* become:
+                        B(parent, root)
+                        /
+                        R(child)
+                */
             }
             if (is_brother_Red(current)) {
-                // case2
+                /* case 2:
+                            B(parent)
+                            /       \
+                        R(current)  R(brother)
+                        /       
+                    R(child)
+                */
                 current->color = BLACK;
                 set_brother_color(current, BLACK);
                 set_parent_color(current, RED);
                 return current;
+                /* become:
+                            R(parent)
+                            /       \
+                        B(current)  B(brother)
+                        /       
+                    R(child)
+                */
             } else {
                 if (current->parent_direction != child->parent_direction) {
-                    // case 5
+                    /* case 5:
+                                B(parent)
+                                /       \
+                            R(current)  B(brother)
+                                 \       
+                                R(child)
+                        or 
+                                B(parent)
+                                /       \
+                            B(brother)  R(current)
+                                        /       
+                                    R(child)
+                    */
                     current = invert(current, child);
+                    /* become case 6
+                    */
                 }
-                // case 6
+                /* case 6:
+                              B(parent)
+                              /       \
+                          R(current)  B(brother)
+                            /       
+                        R(child)
+                    or
+                            B(parent)
+                            /       \
+                        B(brother)  R(current)
+                                        \      
+                                      R(child)
+                */
                 current->color = BLACK;
                 set_parent_color(current, RED);
                 return invert(current->parent, current);
+                /* become:
+                            B(current)
+                            /       \
+                        R(child)   R(parent)
+                                        \
+                                    R(brother)
+                    or 
+                            B(current)
+                            /       \
+                        R(parent)   R(child)
+                         /
+                    R(brother)
+                */
             }
         }
     } else {
