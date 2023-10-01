@@ -2,6 +2,7 @@
 #pragma once
 #include <string>
 #include <optional>
+#include <shared_mutex>
 #include "balanced_tree_factory.hpp"
 #include "config.hpp"
 
@@ -20,4 +21,5 @@ public:
     void flush_to_storage();
 private:
     shared_ptr<BalancedTree<K, V>> tree;
+    shared_mutex rwLock;
 };

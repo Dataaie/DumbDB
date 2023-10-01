@@ -33,3 +33,8 @@ vector<pair<K, optional<V>>> Storage<K, V>::scan(const K& key1, const K& key2) {
     return vector<pair<K, optional<V>>>();
 }
 
+template <typename K, typename V>
+void Storage<K, V>::open(const string& database_name) {
+    database_name_ = database_name;
+}
+

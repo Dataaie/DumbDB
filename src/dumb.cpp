@@ -19,9 +19,10 @@ public:
     vector<pair<K, optional<V>>> Scan(const K& key1, const K& key2) override;
     void Close() override;
 private:
+    string database_name_;
     bool is_open_ = false;
-    Memtable<K, V> memtable;
-    Storage<K, V> storage;
+    Memtable<K, V> memtable_;
+    Storage<K, V> storage_;
 };
 
 template <typename K, typename V>
@@ -30,40 +31,41 @@ void DumbDB<K, V>::Open(const string& database_name) {
         cout << "Database " << database_name << " already open.\n";
         return;
     }
-    memtable = Memtable<K, V>();
-    storage = Storage<K, V>();
+    is_open_ = true;
+    database_name_ = database_name;
+    storage_.open(database_name);
     cout << "Database " << database_name << " opened.\n";
 }
 
 template <typename K, typename V>
 void DumbDB<K, V>::Put(const K& key, const optional<V>& value) {
-    memtable.put(key, value);
+    memtable_.put(key, value);
 }
 
 template <typename K, typename V>
 optional<V> DumbDB<K, V>::Get(const K& key) {
-    auto result = memtable.get(key);
+    auto result = memtable_.get(key);
     if (result.has_value()) {
         return result;
     }
-    if (memtable.has_key(key)) {
+    if (memtable_.has_key(key)) {
         return result;
     }
-    return storage.get(key);
+    return storage_.get(key);
 }
 
 template <typename K, typename V>
 void DumbDB<K, V>::Delete(const K& key) {
-    memtable.remove(key);
+    memtable_.remove(key);
 }
 
 template <typename K, typename V>
 vector<pair<K, optional<V>>> DumbDB<K, V>::Scan(const K& key1, const K& key2) {
     auto all_data = create_balanced_tree<K, V>(DEFAULT_BALANCED_TREE_TYPE);
-    for (auto& pair : storage.scan(key1, key2)) {
+    for (auto& pair : storage_.scan(key1, key2)) {
         all_data->insert(pair.first, pair.second);
     }
-    for (auto& pair : memtable.scan(key1, key2)) {
+    for (auto& pair : memtable_.scan(key1, key2)) {
         all_data->insert(pair.first, pair.second);
     }
     return all_data->scan(key1, key2);
@@ -75,7 +77,7 @@ void DumbDB<K, V>::Close() {
         cout << "Database already closed.\n";
         return;
     }
-    memtable.flush_to_storage();
+    memtable_.flush_to_storage();
     cout << "Database closed.\n";
 }
 
