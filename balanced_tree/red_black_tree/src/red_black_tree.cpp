@@ -1,6 +1,7 @@
 #include "config.hpp"
 #include "red_black_tree.hpp"
-#include "utils.hpp"
+#include "utils.cpp"
+#include <iostream>
 
 template class RBTree<KEY_TYPE, VALUE_TYPE>;
 
@@ -107,4 +108,24 @@ Node<K, V>* RBTree<K, V>::fix_insertion(Node<K, V>* new_node) {
     // case3
     new_node->color = BLACK;
     return new_node; 
+}
+
+template <typename K, typename V>
+bool RBTree<K, V>::is_valid() {
+    if (root == nullptr) {
+        return true;
+    }
+    if (root->color == RED) {
+        return false;
+    }
+    return root->is_valid() != -1;
+}
+
+template <typename K, typename V>
+void RBTree<K, V>::print_tree() {
+    if (root == nullptr) {
+        cout << "empty tree" << endl;
+        return;
+    }
+    root->print();
 }

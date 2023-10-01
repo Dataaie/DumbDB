@@ -22,6 +22,8 @@ public:
     optional<V> search(const K& key) override;
     void remove(const K& key) override;
     vector<pair<K, optional<V>>> scan(const K& key1, const K& key2) override;
+    bool is_valid() override;
+    void print_tree() override;
 
 private:
     Node<K, V>* root = nullptr;

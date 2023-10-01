@@ -90,7 +90,25 @@ void red_black_tree_simple_test() {
     }
 }
 
+void test_insert(BalancedTree<string, string>* tree, const string& key, const string& value) {
+    tree->insert(key, value);
+    if (!tree->is_valid()) {
+        tree->print_tree();
+        throw runtime_error("Tree is not valid after insert");
+    } else {
+        cout << key << " inserted\n";
+    }
+}
+void red_black_tree_robust_test() {
+    auto tree = createBalancedTree<string, string>(TreeType::RedBlackTree);
+    auto numbers = TestUtils::suffled_numbers(1000);
+    for (auto& number : numbers) {
+        test_insert(tree.get(), number, number);
+    }
+}
+
 void executeTests(const vector<pair<TestFunc, string>>& tests) {
+    red_black_tree_simple_test();
     for (auto& [test, test_name] : tests) {
         stringstream buffer;
         auto oldCoutBuf = cout.rdbuf(buffer.rdbuf());
@@ -115,7 +133,8 @@ void executeTests(const vector<pair<TestFunc, string>>& tests) {
 int main() {
     vector<pair<TestFunc, string>> tests = {
         {simplest_test, "simplest_test"}, 
-        {red_black_tree_simple_test, "red_black_tree_simple_test"}
+        {red_black_tree_simple_test, "red_black_tree_simple_test"},
+        {red_black_tree_robust_test, "red_black_tree_robust_test"}
     };
     executeTests(tests);
     TestUtils::printAllTestsSuccess();

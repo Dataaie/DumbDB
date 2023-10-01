@@ -18,4 +18,6 @@ public:
     virtual optional<V> search(const K& key) = 0;
     virtual void remove(const K& key) = 0;
     virtual vector<pair<K, optional<V>>> scan(const K& key1, const K& key2) = 0;
+    virtual bool is_valid() = 0;
+    virtual void print_tree() = 0;
 };
