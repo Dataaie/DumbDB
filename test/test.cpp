@@ -99,6 +99,7 @@ void test_insert(BalancedTree<string, string>* tree, const string& key, const st
         cout << key << " inserted\n";
     }
 }
+
 void red_black_tree_robust_test() {
     auto tree = createBalancedTree<string, string>(TreeType::RedBlackTree);
     auto numbers = TestUtils::suffled_numbers(1000);
@@ -108,7 +109,6 @@ void red_black_tree_robust_test() {
 }
 
 void executeTests(const vector<pair<TestFunc, string>>& tests) {
-    red_black_tree_simple_test();
     for (auto& [test, test_name] : tests) {
         stringstream buffer;
         auto oldCoutBuf = cout.rdbuf(buffer.rdbuf());
