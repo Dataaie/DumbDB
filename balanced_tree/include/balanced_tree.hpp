@@ -13,6 +13,7 @@ template <typename K, typename V>
 class BalancedTree {
 public:
     ~BalancedTree() {};
+    virtual bool has_key(const K& key) = 0;
     virtual void insert(const K& key, const optional<V>& value) = 0;
     virtual optional<V> search(const K& key) = 0;
     virtual void remove(const K& key) = 0;
