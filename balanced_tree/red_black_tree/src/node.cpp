@@ -1,6 +1,7 @@
 #include "node.hpp"
 #include "config.hpp"
-#include "utils.hpp"
+#include "utils.cpp"
+#include <iostream>
 
 template class Node<KEY_TYPE, VALUE_TYPE>;
 
@@ -89,3 +90,50 @@ void Node<K, V>::free() {
     }
     delete this;
 };
+
+
+
+template <typename K, typename V>
+int Node<K, V>::is_valid() {
+    if (color == RED) {
+        if (left != nullptr && left->color == RED) {
+            return -1;
+        }
+        if (right != nullptr && right->color == RED) {
+            return -1;
+        }
+    }
+    int left_black_height = 0;
+    int right_black_height = 0;
+    if (left != nullptr) {
+        left_black_height = left->is_valid();
+    }
+    if (left_black_height == -1) {
+        return -1;
+    }
+    if (right != nullptr) {
+        right_black_height = right->is_valid();
+    }
+    if (right_black_height == -1) {
+        return -1;
+    }
+    if (left_black_height != right_black_height) {
+        return -1;
+    }
+    if (color == BLACK) {
+        return left_black_height + 1;
+    } else {
+        return left_black_height;
+    }
+}
+
+template <typename K, typename V>
+void Node<K, V>::print(int depth) {
+    cout << string(depth, ' ') << key << " " << (color == RED ? "R" : "B") << endl;
+    if (left != nullptr) {
+        left->print(depth + 1);
+    }
+    if (right != nullptr) {
+        right->print(depth + 1);
+    }
+}

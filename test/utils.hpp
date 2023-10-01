@@ -52,4 +52,23 @@ namespace TestUtils {
         }
         return result;
     }
+
+    void suffle(vector<string>& v) {
+        for (size_t i = 0; i < v.size(); ++i) {
+            swap(v[i], v[rand() % v.size()]);
+        }
+    }
+
+    vector<string> suffled_numbers(size_t count) {
+        vector<string> result;
+        result.reserve(count);
+        for (size_t i = 0; i < count; ++i) {
+            result.push_back(to_string(i));
+        }
+        suffle(result);
+        suffle(result);
+        suffle(result);
+        suffle(result);
+        return result;
+    }
 }

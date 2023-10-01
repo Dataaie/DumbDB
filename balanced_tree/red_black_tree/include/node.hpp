@@ -32,5 +32,7 @@ struct Node {
     Node* insert(const K& key, const optional<V>& value);
     void scan(const K& key1, const K& key2, vector<pair<K, optional<V>>>& results);
     void free();
+    int is_valid();
+    void print(int depth=0);
 };
 
