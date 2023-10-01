@@ -1,12 +1,14 @@
 #pragma once
 #include <string>
 #include <optional>
+#include <vector>
 
 using namespace std;
 
 template <typename K, typename V>
 class Storage {
 public:
+    Storage();
     ~Storage();
     void put(const K& key, const optional<V>& value);
     optional<V> get(const K& key);

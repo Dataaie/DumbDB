@@ -5,7 +5,7 @@
 #include <memory>
 
 template <typename K, typename V>
-shared_ptr<BalancedTree<K, V>> createBalancedTree(const TreeType& type) {
+shared_ptr<BalancedTree<K, V>> create_balanced_tree(const TreeType& type) {
     if (type == TreeType::RedBlackTree) {
         return make_shared<RBTree<K, V>>();
     } else {

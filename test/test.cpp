@@ -10,7 +10,7 @@ typedef void (*TestFunc)();
 
 using namespace std;
 
-void simplest_test() {
+void project_can_be_built_test() {
     IDumbDB<string, string>* db = CreateDumbDB<string, string>();
     db->Open("MyDatabase");
 
@@ -54,7 +54,7 @@ void simplest_test() {
 }
 
 void red_black_tree_simple_test() {
-    auto tree = createBalancedTree<string, string>(TreeType::RedBlackTree);
+    auto tree = create_balanced_tree<string, string>(TreeType::RedBlackTree);
     tree->insert("key1", "value1");
     tree->insert("key2", "value2");
     tree->insert("key3", "value3");
@@ -100,8 +100,8 @@ void test_insert(BalancedTree<string, string>* tree, const string& key, const st
     }
 }
 
-void red_black_tree_robust_test() {
-    auto tree = createBalancedTree<string, string>(TreeType::RedBlackTree);
+void red_black_tree_insert_robust_test() {
+    auto tree = create_balanced_tree<string, string>(TreeType::RedBlackTree);
     auto numbers = TestUtils::suffled_numbers(1000);
     for (auto& number : numbers) {
         test_insert(tree.get(), number, number);
@@ -132,9 +132,9 @@ void executeTests(const vector<pair<TestFunc, string>>& tests) {
 
 int main() {
     vector<pair<TestFunc, string>> tests = {
-        {simplest_test, "simplest_test"}, 
-        {red_black_tree_simple_test, "red_black_tree_simple_test"},
-        {red_black_tree_robust_test, "red_black_tree_robust_test"}
+        {project_can_be_built_test, "project can be built test"}, 
+        {red_black_tree_simple_test, "red black tree simple test"},
+        {red_black_tree_insert_robust_test, "red black tree insert robust test"}
     };
     executeTests(tests);
     TestUtils::printAllTestsSuccess();

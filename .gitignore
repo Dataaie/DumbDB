@@ -1,6 +1,6 @@
 # IDEs and editors
 .idea
-.vscode
+# .vscode
 
 # CMake build files
 CMakeFiles/

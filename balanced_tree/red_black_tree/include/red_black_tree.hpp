@@ -24,7 +24,7 @@ public:
     vector<pair<K, optional<V>>> scan(const K& key1, const K& key2) override;
     bool is_valid() override;
     void print_tree() override;
-
+    
 private:
     Node<K, V>* root = nullptr;
     Node<K, V>* fix_insertion(Node<K, V>* new_node);
