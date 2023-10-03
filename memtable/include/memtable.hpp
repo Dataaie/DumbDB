@@ -21,5 +21,4 @@ public:
     void flush_to_storage();
 private:
     shared_ptr<BalancedTree<K, V>> tree;
-    shared_mutex rwLock;
 };

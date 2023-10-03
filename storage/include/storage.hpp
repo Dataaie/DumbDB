@@ -3,6 +3,8 @@
 #include <optional>
 #include <vector>
 
+#define FILE_PATH "./data/"
+
 using namespace std;
 
 template <typename K, typename V>

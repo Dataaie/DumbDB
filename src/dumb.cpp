@@ -4,6 +4,10 @@
 #include "memtable.hpp"
 #include "storage.hpp"
 #include "balanced_tree_factory.hpp"
+#include <mutex>
+
+#define UNIQUE_LOCK unique_lock<shared_mutex> lock(rwLock);
+#define SHARED_LOCK shared_lock<shared_mutex> lock(rwLock);
 
 template class IDumbDB<KEY_TYPE, VALUE_TYPE>;
 template IDumbDB<KEY_TYPE, VALUE_TYPE>* CreateDumbDB<KEY_TYPE, VALUE_TYPE>();
@@ -23,10 +27,12 @@ private:
     bool is_open_ = false;
     Memtable<K, V> memtable_;
     Storage<K, V> storage_;
+    shared_mutex rwLock;
 };
 
 template <typename K, typename V>
 void DumbDB<K, V>::Open(const string& database_name) {
+    UNIQUE_LOCK
     if (is_open_) {
         cout << "Database " << database_name << " already open.\n";
         return;
@@ -39,11 +45,13 @@ void DumbDB<K, V>::Open(const string& database_name) {
 
 template <typename K, typename V>
 void DumbDB<K, V>::Put(const K& key, const optional<V>& value) {
+    UNIQUE_LOCK
     memtable_.put(key, value);
 }
 
 template <typename K, typename V>
 optional<V> DumbDB<K, V>::Get(const K& key) {
+    SHARED_LOCK
     auto result = memtable_.get(key);
     if (result.has_value()) {
         return result;
@@ -56,11 +64,13 @@ optional<V> DumbDB<K, V>::Get(const K& key) {
 
 template <typename K, typename V>
 void DumbDB<K, V>::Delete(const K& key) {
+    UNIQUE_LOCK
     memtable_.remove(key);
 }
 
 template <typename K, typename V>
 vector<pair<K, optional<V>>> DumbDB<K, V>::Scan(const K& key1, const K& key2) {
+    SHARED_LOCK
     auto all_data = create_balanced_tree<K, V>(DEFAULT_BALANCED_TREE_TYPE);
     for (auto& pair : storage_.scan(key1, key2)) {
         all_data->insert(pair.first, pair.second);
@@ -73,6 +83,7 @@ vector<pair<K, optional<V>>> DumbDB<K, V>::Scan(const K& key1, const K& key2) {
 
 template <typename K, typename V>
 void DumbDB<K, V>::Close() {
+    UNIQUE_LOCK
     if (!is_open_) {
         cout << "Database already closed.\n";
         return;
