@@ -5,7 +5,7 @@ template class Storage<KEY_TYPE, VALUE_TYPE>;
 
 template <typename K, typename V>
 Storage<K, V>::Storage() {
-    
+    //TODO: a table that stores info for locations on disk
 }
 
 template <typename K, typename V>

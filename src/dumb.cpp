@@ -31,7 +31,12 @@ void DumbDB<K, V>::Open(const string& database_name) {
         return;
     }
     memtable = Memtable<K, V>();
+    //TODO: 
+    //try to read database table file from disk; if not found, create one with first entry "database_name"
+    //try to search for database_name in the database table; if not found, create one metadata file for "database_name"
+    //if database_name exist in the metadata table, assign it to storage
     storage = Storage<K, V>();
+    //is_open_ = true;
     cout << "Database " << database_name << " opened.\n";
 }
 
@@ -76,6 +81,7 @@ void DumbDB<K, V>::Close() {
         return;
     }
     memtable.flush_to_storage();
+    //is_open = false;
     cout << "Database closed.\n";
 }
 

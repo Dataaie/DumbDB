@@ -5,7 +5,7 @@
 
 using namespace std;
 
-template <typename K, typename V>
+template <typename K, typename V> // alt
 class Storage {
 public:
     Storage();

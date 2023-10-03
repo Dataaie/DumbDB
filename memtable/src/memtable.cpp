@@ -40,5 +40,5 @@ bool Memtable<K, V>::has_key(const K& key) {
 
 template <typename K, typename V>
 void Memtable<K, V>::flush_to_storage() {
-
+    //TODO: traverse all key/value pairs in order, 
 }
