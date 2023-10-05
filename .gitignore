@@ -46,3 +46,5 @@ DumbTests
 *.exe
 *.out
 *.app
+
+data/

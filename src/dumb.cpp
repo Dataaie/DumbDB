@@ -4,6 +4,7 @@
 #include "memtable.hpp"
 #include "storage.hpp"
 #include "balanced_tree_factory.hpp"
+#include <filesystem>
 
 template class IDumbDB<KEY_TYPE, VALUE_TYPE>;
 template IDumbDB<KEY_TYPE, VALUE_TYPE>* CreateDumbDB<KEY_TYPE, VALUE_TYPE>();
@@ -20,6 +21,7 @@ public:
     void Close() override;
 private:
     bool is_open_ = false;
+    string cur_database;
     Memtable<K, V> memtable;
     Storage<K, V> storage;
 };
@@ -30,14 +32,15 @@ void DumbDB<K, V>::Open(const string& database_name) {
         cout << "Database " << database_name << " already open.\n";
         return;
     }
+    cur_database = "./data/" + database_name;
+    if(!filesystem::exists(cur_database)){
+        filesystem::create_directory(cur_database);
+        cout << "Database " << database_name << " created.\n" << endl;
+    }
     memtable = Memtable<K, V>();
-    //TODO: 
-    //try to read database table file from disk; if not found, create one with first entry "database_name"
-    //try to search for database_name in the database table; if not found, create one metadata file for "database_name"
-    //if database_name exist in the metadata table, assign it to storage
     storage = Storage<K, V>();
-    //is_open_ = true;
-    cout << "Database " << database_name << " opened.\n";
+    is_open_ = true;
+    cout << "Database " << database_name << " opened.\n" << endl;
 }
 
 template <typename K, typename V>
@@ -80,8 +83,8 @@ void DumbDB<K, V>::Close() {
         cout << "Database already closed.\n";
         return;
     }
-    memtable.flush_to_storage();
-    //is_open = false;
+    memtable.flush_to_storage(cur_database);
+    is_open_ = false;
     cout << "Database closed.\n";
 }
 

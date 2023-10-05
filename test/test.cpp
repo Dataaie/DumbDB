@@ -5,6 +5,8 @@
 #include <sstream>
 #include <vector>
 #include <stdexcept>
+#include <cstdio>
+#include <fstream>
 
 typedef void (*TestFunc)();
 
@@ -108,6 +110,20 @@ void red_black_tree_insert_robust_test() {
     }
 }
 
+void simple_open_close_test() {
+    IDumbDB<string, string>* db = CreateDumbDB<string, string>();
+    db->Open("MyDatabase");
+
+    db->Put("key1", "value1");
+    db->Put("key4", "value4");
+    db->Put("key5", "value5");
+    db->Put("key2", "value2");
+    db->Put("key3", "value3");
+
+    db->Close();
+
+}
+
 void executeTests(const vector<pair<TestFunc, string>>& tests) {
     for (auto& [test, test_name] : tests) {
         stringstream buffer;
@@ -138,5 +154,10 @@ int main() {
     };
     executeTests(tests);
     TestUtils::printAllTestsSuccess();
+    // simple_write_file_test();
+    // simple_read_file_test();
+    // simple_file_test();
+    simple_open_close_test();
     return 0;
 }
+
