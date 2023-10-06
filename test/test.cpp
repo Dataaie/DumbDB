@@ -113,15 +113,19 @@ void red_black_tree_insert_robust_test() {
 void simple_open_close_test() {
     IDumbDB<string, string>* db = CreateDumbDB<string, string>();
     db->Open("MyDatabase");
-
     db->Put("key1", "value1");
     db->Put("key4", "value4");
     db->Put("key5", "value5");
     db->Put("key2", "value2");
     db->Put("key3", "value3");
-
     db->Close();
 
+    db->Open("MyDatabase");
+    db->Put("key6", "value6");
+    db->Put("key7", "value7");
+    db->Put("key9", "value9");
+    db->Put("key8", "value8");
+    db->Close();
 }
 
 void executeTests(const vector<pair<TestFunc, string>>& tests) {

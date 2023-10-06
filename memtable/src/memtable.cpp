@@ -1,5 +1,6 @@
 #include "memtable.hpp"
 #include "config.hpp"
+// #include "../../storage/include/storage.hpp"
 #include <iostream>
 #include <fstream>
 #include <utility> 
@@ -53,11 +54,11 @@ bool Memtable<K, V>::has_key(const K& key) {
 }
 
 template <typename K, typename V>
-void Memtable<K, V>::flush_to_storage(const string& database_name) {
+void Memtable<K, V>::flush_to_storage(string& database_path, int sst_num) {
     vector<pair<K, optional<V>>> memtable_traversal = tree->scan(minKey, maxKey);
-    string filename = database_name + "/pairs.txt"; // change to assign unique names
-    cout << filename << endl;
-    ofstream outFile(filename);
+    string sst_file = database_path + "/" + to_string(sst_num) + ".txt";
+    // cout << sst_file << endl;
+    ofstream outFile(sst_file);
     
     if(!outFile.is_open()) {
         cerr << "Failed to open file for writing." << endl;
@@ -71,5 +72,5 @@ void Memtable<K, V>::flush_to_storage(const string& database_name) {
         } 
     }
     outFile.close();
-    cout << "Pairs written to file successfully." << endl;
+    cout << "SST flushed to storage successfully." << endl;
 }

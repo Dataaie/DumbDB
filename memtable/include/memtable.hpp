@@ -17,7 +17,7 @@ public:
     void remove(const K& key);
     vector<pair<K, optional<V>>> scan(const K& key1, const K& key2);
     bool has_key(const K& key);
-    void flush_to_storage(const string& database_name);
+    void flush_to_storage(string& database_path, int sst_num);
 private:
     shared_ptr<BalancedTree<K, V>> tree;
     K minKey;

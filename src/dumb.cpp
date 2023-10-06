@@ -38,7 +38,7 @@ void DumbDB<K, V>::Open(const string& database_name) {
         cout << "Database " << database_name << " created.\n" << endl;
     }
     memtable = Memtable<K, V>();
-    storage = Storage<K, V>();
+    storage = Storage<K, V>(cur_database);
     is_open_ = true;
     cout << "Database " << database_name << " opened.\n" << endl;
 }
@@ -83,7 +83,10 @@ void DumbDB<K, V>::Close() {
         cout << "Database already closed.\n";
         return;
     }
-    memtable.flush_to_storage(cur_database);
+    int sst_num = storage.get_sst_num();
+    memtable.flush_to_storage(cur_database, sst_num);
+    storage.update();
+    storage.put();
     is_open_ = false;
     cout << "Database closed.\n";
 }
